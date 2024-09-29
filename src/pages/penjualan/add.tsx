@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { API } from "../../hooks";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 type FormData = {
   kode_pelanggan: string;
   barang: {
-    kode_barang: string;
+    id: number;
     qty: number;
   }[];
 };
@@ -19,7 +20,8 @@ export const AddPenjualan: React.FC = () => {
     kode_pelanggan: "",
     barang: [],
   });
-  const [barangInput, setBarangInput] = useState({ kode_barang: "", qty: 0 });
+
+  const [barangInput, setBarangInput] = useState({ id: 0, qty: 0 });
 
   // Fetch pelanggan and barang data from API
   useEffect(() => {
@@ -47,7 +49,7 @@ export const AddPenjualan: React.FC = () => {
   const handleBarangChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setBarangInput({
       ...barangInput,
-      [e.target.name]: e.target.value,
+      id: Number(e.target.value), // Updated to store `id`
     });
   };
 
@@ -61,17 +63,18 @@ export const AddPenjualan: React.FC = () => {
 
   // Fungsi untuk menambah barang ke dalam state
   const addBarang = () => {
-    if (barangInput.kode_barang && barangInput.qty > 0) {
+    if (barangInput.id && barangInput.qty > 0) {
       setFormData({
         ...formData,
         barang: [...formData.barang, barangInput],
       });
-      setBarangInput({ kode_barang: "", qty: 0 });
+      setBarangInput({ id: 0, qty: 0 });
     } else {
       toast.error("Lengkapi data barang sebelum menambahkannya");
     }
   };
 
+  const navigate = useNavigate();
   // Handle form submit for creating Penjualan
   const handleSubmitPenjualan = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -95,6 +98,7 @@ export const AddPenjualan: React.FC = () => {
       toast.error("Lengkapi data pelanggan!");
     }
   };
+  console.log("formData", formData.barang);
 
   // Handle submit for adding items to the penjualan
   const handleSubmitItem = async () => {
@@ -103,14 +107,21 @@ export const AddPenjualan: React.FC = () => {
         // Kirim setiap barang ke API
         await Promise.all(
           formData.barang.map(async (item) => {
+            console.log("Submitting item:", item); // Debugging log to check the payload
+
+            // Ensure the correct payload is being sent
             await API.post(`penjualan/${idNota}/items`, {
-              kode_barang: item.kode_barang,
+              kode_barang: item.id, // Change `id` to `kode_barang`
               qty: item.qty,
             });
           })
         );
         toast.success("Semua item berhasil ditambahkan ke penjualan!");
+        setTimeout(() => {
+          navigate("/penjualan");
+        }, 2000);
       } catch (error) {
+        console.error("Error submitting items:", error); // More detailed error log
         toast.error("Gagal menambahkan item ke penjualan!");
       }
     } else {
@@ -192,13 +203,13 @@ export const AddPenjualan: React.FC = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <select
                         name="kode_barang"
-                        value={barangInput.kode_barang}
+                        value={barangInput.id}
                         onChange={handleBarangChange}
                         className="w-full px-2 py-1 border border-gray-300 rounded"
                       >
                         <option value="">Pilih Barang</option>
                         {dataBarang.map((barang) => (
-                          <option key={barang.kode} value={barang.kode}>
+                          <option key={barang.id} value={barang.id}>
                             {barang.nama}
                           </option>
                         ))}
@@ -228,9 +239,8 @@ export const AddPenjualan: React.FC = () => {
                     <tr key={index} className="border-b hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                         {
-                          dataBarang.find(
-                            (barang) => barang.kode === item.kode_barang
-                          )?.nama
+                          dataBarang.find((barang) => barang.id === item.id)
+                            ?.nama // Display the name of the selected item
                         }
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
