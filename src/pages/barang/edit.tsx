@@ -6,7 +6,6 @@ import { API } from "../../hooks"; // Pastikan untuk menyesuaikan import API
 
 // Tipe data untuk form barang
 type FormData = {
-  kode: string;
   nama: string;
   kategori: string;
   harga: number;
@@ -15,7 +14,6 @@ type FormData = {
 export const EditBarang = () => {
   // State untuk data form
   const [formData, setFormData] = useState<FormData>({
-    kode: "",
     nama: "",
     kategori: "",
     harga: 0,
@@ -37,10 +35,9 @@ export const EditBarang = () => {
     try {
       const response = await API.get(`barang/${id}`);
       setFormData({
-        kode: response.data.KODE,
-        nama: response.data.NAMA,
-        kategori: response.data.KATEGORI,
-        harga: response.data.HARGA,
+        nama: response.data.nama,
+        kategori: response.data.kategori,
+        harga: response.data.harga,
       });
       // toast.success("Data barang berhasil dimuat!", { theme: "colored" });
     } catch (error) {
@@ -61,16 +58,17 @@ export const EditBarang = () => {
     e.preventDefault();
     try {
       // Kirim data yang diperbarui ke API
-      await API.put(`barang/${formData.kode}`, {
-        KODE: formData.kode,
-        NAMA: formData.nama,
-        KATEGORI: formData.kategori,
-        HARGA: formData.harga,
+      await API.put(`barang/${id}`, {
+        nama: formData.nama,
+        kategori: formData.kategori,
+        harga: formData.harga,
       });
 
       // Tampilkan notifikasi sukses
       toast.success("Data barang berhasil diperbarui!", { theme: "colored" });
-      navigate("/barang");
+      setTimeout(() => {
+        navigate("/barang");
+      }, 1500);
     } catch (error) {
       console.error("Gagal memperbarui data barang:", error);
       toast.error("Gagal memperbarui data barang!", { theme: "colored" });
@@ -89,9 +87,6 @@ export const EditBarang = () => {
             <thead>
               <tr className="bg-gray-100 border-b">
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                  Kode Barang
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Nama Barang
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
@@ -107,17 +102,6 @@ export const EditBarang = () => {
             </thead>
             <tbody>
               <tr className="border-b">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <input
-                    type="text"
-                    name="kode"
-                    value={formData.kode}
-                    onChange={handleChange}
-                    className="w-full px-2 py-1 border border-gray-300 rounded"
-                    placeholder="Enter Kode"
-                    disabled // Nonaktifkan input Kode karena tidak boleh diedit
-                  />
-                </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <input
                     type="text"

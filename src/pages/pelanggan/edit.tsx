@@ -6,7 +6,6 @@ import { API } from "../../hooks";
 
 // Tipe data untuk form
 type FormData = {
-  id_pelanggan: string;
   nama: string;
   domisili: string;
   jenis_kelamin: string;
@@ -15,7 +14,6 @@ type FormData = {
 export const EditPelanggan = () => {
   // State untuk data form
   const [formData, setFormData] = useState<FormData>({
-    id_pelanggan: "",
     nama: "",
     domisili: "",
     jenis_kelamin: "",
@@ -34,10 +32,9 @@ export const EditPelanggan = () => {
     try {
       const response = await API.get(`pelanggan/${id}`);
       setFormData({
-        id_pelanggan: response.data.ID_PELANGGAN,
-        nama: response.data.NAMA,
-        domisili: response.data.DOMISILI,
-        jenis_kelamin: response.data.JENIS_KELAMIN,
+        nama: response.data.nama,
+        domisili: response.data.domisili,
+        jenis_kelamin: response.data.jenis_kelamin,
       });
     } catch (error) {
       console.error("Gagal memuat data pelanggan:", error);
@@ -56,19 +53,19 @@ export const EditPelanggan = () => {
     e.preventDefault();
     try {
       // Kirim data yang diperbarui ke API
-      await API.put(`pelanggan/${formData.id_pelanggan}`, {
-        ID_PELANGGAN: formData.id_pelanggan,
-        NAMA: formData.nama,
-        DOMISILI: formData.domisili,
-        JENIS_KELAMIN: formData.jenis_kelamin,
+      await API.put(`pelanggan/${id}`, {
+        nama: formData.nama,
+        domisili: formData.domisili,
+        jenis_kelamin: formData.jenis_kelamin,
       });
 
       // Tampilkan notifikasi sukses
       toast.success("Data pelanggan berhasil diperbarui!", {
         theme: "colored",
       });
-
-      navigate("/pelanggan");
+      setTimeout(() => {
+        navigate("/pelanggan");
+      }, 1500); // Delay untuk memberikan waktu toast muncul
     } catch (error) {
       console.error("Gagal memperbarui data pelanggan:", error);
       toast.error("Gagal memperbarui data pelanggan!", { theme: "colored" });
@@ -87,9 +84,6 @@ export const EditPelanggan = () => {
             <thead>
               <tr className="bg-gray-100 border-b">
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                  ID Pelanggan
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Nama
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
@@ -105,17 +99,6 @@ export const EditPelanggan = () => {
             </thead>
             <tbody>
               <tr className="border-b">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <input
-                    type="text"
-                    name="id_pelanggan"
-                    value={formData.id_pelanggan}
-                    onChange={handleChange}
-                    className="w-full px-2 py-1 border border-gray-300 rounded"
-                    placeholder="Enter ID"
-                    disabled // Nonaktifkan input ID karena tidak boleh diedit
-                  />
-                </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <input
                     type="text"

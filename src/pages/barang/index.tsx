@@ -29,6 +29,9 @@ export default function Barang() {
       await API.delete(`barang/${kode}`);
       setBarang(barang.filter((item: any) => item.KODE !== kode));
       toast.success(`Barang dengan kode ${kode} berhasil dihapus.`);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
     } catch (error) {
       console.error("Gagal menghapus barang:", error);
       toast.error("Gagal menghapus barang!");
@@ -73,32 +76,32 @@ export default function Barang() {
           <tbody>
             {barang.map((item: any, index: any) => (
               <tr
-                key={item.KODE}
+                key={item.id}
                 className={`border-b hover:cursor-pointer hover:bg-gray-400  ${
                   index % 2 === 0 ? "bg-gray-100" : "bg-gray-200"
                 }`}
               >
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                  {item.KODE}
+                  {item.kode}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                  {item.NAMA}
+                  {item.nama}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                  {item.KATEGORI}
+                  {item.kategori}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                  {item.HARGA}
+                  {item.harga}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <Link to={`/barang/edit/${item.KODE}`}>
+                  <Link to={`/barang/edit/${item.id}`}>
                     <button className="text-blue-600 hover:text-blue-900 mr-2">
                       Edit
                     </button>
                   </Link>
                   <button
                     className="text-red-600 hover:text-red-900"
-                    onClick={() => handleDelete(item.KODE)}
+                    onClick={() => handleDelete(item.id)}
                   >
                     Delete
                   </button>

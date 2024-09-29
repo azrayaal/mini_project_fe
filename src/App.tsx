@@ -15,6 +15,10 @@ import { EditBarang } from "./pages/barang/edit";
 import { EditPenjualan } from "./pages/penjualan/edit";
 import { EditPelanggan } from "./pages/pelanggan/edit";
 import { ToastContainer } from "react-toastify";
+import ItemPenjualan from "./pages/itemPenjualan";
+import { AddItemPenjualan } from "./pages/itemPenjualan/add";
+import { EditItemPenjualan } from "./pages/itemPenjualan/edit";
+import DetailPenjualan from "./pages/penjualan/detail";
 // import Home from "./pages/home";
 
 const root = ReactDOM.createRoot(
@@ -45,7 +49,15 @@ const App: React.FC = () => {
             {/* penjualan */}
             <Route path="/penjualan" element={<Penjualan />} />
             <Route path="/penjualan/add" element={<AddPenjualan />} />
+            <Route path="/penjualan/:id" element={<DetailPenjualan />} />
             <Route path="/penjualan/edit/:id" element={<EditPenjualan />} />
+            {/* item-penjualan */}
+            <Route path="/item-penjualan" element={<ItemPenjualan />} />
+            <Route path="/item-penjualan/add" element={<AddItemPenjualan />} />
+            <Route
+              path="/item-penjualan/edit/:id"
+              element={<EditItemPenjualan />}
+            />
             {/* pelanggan */}
             <Route path="/pelanggan" element={<Pelanggan />} />
             <Route path="/pelanggan/add" element={<AddPelanggan />} />

@@ -6,7 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 type FormData = {
-  id_pelanggan: string;
+  // id_pelanggan: string;
   nama: string;
   domisili: string;
   jenis_kelamin: string;
@@ -14,7 +14,7 @@ type FormData = {
 
 export const AddPelanggan = () => {
   const [formData, setFormData] = useState<FormData>({
-    id_pelanggan: "",
+    // id_pelanggan: "",
     nama: "",
     domisili: "",
     jenis_kelamin: "",
@@ -34,10 +34,10 @@ export const AddPelanggan = () => {
 
     // Format data yang akan dikirim ke API
     const newPelanggan = {
-      ID_PELANGGAN: formData.id_pelanggan,
-      NAMA: formData.nama,
-      DOMISILI: formData.domisili,
-      JENIS_KELAMIN: formData.jenis_kelamin,
+      // ID_PELANGGAN: formData.id_pelanggan,
+      nama: formData.nama,
+      domisili: formData.domisili,
+      jenis_kelamin: formData.jenis_kelamin,
     };
 
     try {
@@ -70,9 +70,6 @@ export const AddPelanggan = () => {
             <thead>
               <tr className="bg-gray-100 border-b">
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                  ID Pelanggan
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Nama
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
@@ -88,16 +85,6 @@ export const AddPelanggan = () => {
             </thead>
             <tbody>
               <tr className="border-b">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <input
-                    type="text"
-                    name="id_pelanggan"
-                    value={formData.id_pelanggan}
-                    onChange={handleChange}
-                    className="w-full px-2 py-1 border border-gray-300 rounded"
-                    placeholder="Enter ID Pelanggan"
-                  />
-                </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <input
                     type="text"

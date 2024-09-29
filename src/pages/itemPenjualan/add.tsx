@@ -1,82 +1,44 @@
 import React, { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { API } from "../../hooks"; // Pastikan untuk menyesuaikan import API
-import { useNavigate } from "react-router-dom";
-
 type FormData = {
-  nama: string;
-  kategori: string;
-  harga: number;
+  id: string;
+  name: string;
+  email: string;
 };
-
-export const AddBarang = () => {
-  const [formData, setFormData] = useState<FormData>({
-    nama: "",
-    kategori: "",
-    harga: 0,
-  });
+export const AddItemPenjualan = () => {
+  const [formData, setFormData] = useState({ id: "", name: "", email: "" });
   const [data, setData] = useState<FormData[]>([]);
-  const navigate = useNavigate();
+
   // Handle input change
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: name === "harga" ? Number(value) : value, // Pastikan harga diubah ke tipe number
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
   // Handle form submit
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
-    // Pastikan semua field telah terisi
-    if (formData.nama && formData.kategori && formData.harga) {
-      try {
-        // Kirim data ke API menggunakan POST request
-        const response = await API.post("barang", {
-          nama: formData.nama,
-          kategori: formData.kategori,
-          harga: formData.harga,
-        });
-
-        // Tambahkan data baru ke state jika berhasil
-        setData([...data, response.data]);
-        setFormData({ nama: "", kategori: "", harga: 0 }); // Reset form
-
-        // Tampilkan notifikasi sukses
-        toast.success("Barang berhasil ditambahkan!", { theme: "colored" });
-        setTimeout(() => {
-          navigate("/barang");
-        }, 1500);
-      } catch (error) {
-        console.error("Error menambahkan barang:", error);
-        toast.error("Gagal menambahkan barang!", { theme: "colored" });
-      }
-    } else {
-      toast.error("Semua field harus diisi!", { theme: "colored" });
+    if (formData.id && formData.name && formData.email) {
+      setData([...data, formData]);
+      setFormData({ id: "", name: "", email: "" }); // Reset form
     }
   };
 
   return (
     <div className="container mx-auto p-4">
-      {/* ToastContainer untuk menampilkan notifikasi */}
-      <ToastContainer position="top-right" autoClose={3000} theme="colored" />
-
-      <h2 className="text-2xl font-bold mb-4">Tambah Barang</h2>
+      <h2 className="text-2xl font-bold mb-4">Tambah Pelanggan</h2>
       <div className="overflow-x-auto">
         <form onSubmit={handleSubmit}>
           <table className="min-w-full bg-white shadow-md rounded-lg">
             <thead>
               <tr className="bg-gray-100 border-b">
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                  Nama
+                  ID
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                  Kategori
+                  Name
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                  Harga
+                  Email
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Actions
@@ -88,31 +50,31 @@ export const AddBarang = () => {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <input
                     type="text"
-                    name="nama"
-                    value={formData.nama}
+                    name="id"
+                    value={formData.id}
                     onChange={handleChange}
                     className="w-full px-2 py-1 border border-gray-300 rounded"
-                    placeholder="Enter Nama Barang"
+                    placeholder="Enter ID"
                   />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <input
                     type="text"
-                    name="kategori"
-                    value={formData.kategori}
+                    name="name"
+                    value={formData.name}
                     onChange={handleChange}
                     className="w-full px-2 py-1 border border-gray-300 rounded"
-                    placeholder="Enter Kategori"
+                    placeholder="Enter Name"
                   />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <input
-                    type="number"
-                    name="harga"
-                    value={formData.harga}
+                    type="email"
+                    name="email"
+                    value={formData.email}
                     onChange={handleChange}
                     className="w-full px-2 py-1 border border-gray-300 rounded"
-                    placeholder="Enter Harga"
+                    placeholder="Enter Email"
                   />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -124,6 +86,29 @@ export const AddBarang = () => {
                   </button>
                 </td>
               </tr>
+              {data.map((item, index) => (
+                <tr key={index} className="border-b hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                    {item.id}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                    {item.name}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                    {item.email}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button
+                      className="text-red-600 hover:text-red-900"
+                      onClick={() =>
+                        setData(data.filter((_, i) => i !== index))
+                      }
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </form>

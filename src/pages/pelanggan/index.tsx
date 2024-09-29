@@ -71,29 +71,29 @@ export default function Pelanggan() {
           <tbody>
             {pelanggan.map((user: any, index: any) => (
               <tr
-                key={user.ID_PELANGGAN}
+                key={user.id}
                 className={`border-b hover:cursor-pointer hover:bg-gray-400  ${
                   index % 2 === 0 ? "bg-gray-100" : "bg-gray-200"
                 }`}
               >
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                  {user.ID_PELANGGAN}
+                  {user.id_pelanggan}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                  {user.NAMA}
+                  {user.nama}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                  {user.JENIS_KELAMIN}
+                  {user.jenis_kelamin}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <Link to={`/pelanggan/edit/${user.ID_PELANGGAN}`}>
+                  <Link to={`/pelanggan/edit/${user.id}`}>
                     <button className="text-blue-600 hover:text-blue-900 mr-2">
                       Edit
                     </button>
                   </Link>
                   <button
                     className="text-red-600 hover:text-red-900"
-                    onClick={() => handleDelete(user.ID_PELANGGAN)}
+                    onClick={() => handleDelete(user.id)}
                   >
                     Delete
                   </button>
